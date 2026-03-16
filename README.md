@@ -5,9 +5,9 @@ Baowen Zhang, Chuan Fang, Rakesh Shrestha, Yixun Liang, Xiaoxiao Long, Ping Tan
 
 [Project page](https://baowenz.github.io/radegs/)
 ![Teaser image](assets/teaser.png)
-# News! 
-### 1. The paper has been accepted by Transactions on Graphics (ToG)!
-### 2. We incorporate the multi-view regularization from PGSR.
+## News!
+- **The paper has been accepted for publication in ACM Transactions on Graphics (TOG)!**
+- **We incorporate the multi-view regularization from PGSR.**
 
 ## 1. Installation
 ### Clone this repository.
@@ -103,7 +103,8 @@ python evaluate_dtu_mesh.py -m <output_dir>
 # Training
 python train.py -s <path_to_preprocessed_tnt> -m <output_dir> -r 2 --use_decoupled_appearance 3
 
-python mesh_extract_tnt.py -m <output_dir> 
+# Mesh extraction
+python mesh_extract_tnt.py -m <output_dir>
 
 # Evaluation
 python eval_tnt/run.py \
