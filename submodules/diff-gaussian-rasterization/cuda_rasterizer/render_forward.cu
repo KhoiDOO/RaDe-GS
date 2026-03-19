@@ -146,7 +146,8 @@ __device__ __forceinline__ bool computeCov2D(const float3& mean, float focal_x, 
             glm::mat3 M_inv = S_inv * R * W;
             cov_cam_inv     = glm::transpose(M_inv) * M_inv;
         } else {
-            glm::vec3 M_inv = R[min_id] * W;
+            glm::vec3 r     = {R[0][min_id], R[1][min_id], R[2][min_id]};
+            glm::vec3 M_inv = r * W;
             cov_cam_inv     = glm::outerProduct(M_inv, M_inv);
         }
     } else {

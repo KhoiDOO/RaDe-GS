@@ -362,9 +362,10 @@ __global__ void computeCov2DCUDA(
             M_inv           = S_inv * R;
             Vrk_inv         = glm::transpose(M_inv) * M_inv;
         } else {
-            glm::vec3 M_inv = R[min_id] * W;
+            glm::vec3 r     = {R[0][min_id], R[1][min_id], R[2][min_id]};
+            glm::vec3 M_inv = r * W;
             cov_cam_inv     = glm::outerProduct(M_inv, M_inv);
-            Vrk_inv         = glm::outerProduct(R[min_id], R[min_id]);
+            Vrk_inv         = glm::outerProduct(r, r);
         }
     } else {
         // Reading location of 3D covariance for this Gaussian
@@ -496,7 +497,7 @@ __global__ void computeCov2DCUDA(
             glm::vec3 nJ_inv_dL_dplane_xvb = glm::transpose(nJ_inv) * glm::vec3(dL_dplane.x, dL_dplane.y, 0);
             glm::mat3 dL_dVrk_inv          = glm::outerProduct(W_uvh, W_uvh * dL_dvb_xvb + W * nJ_inv_dL_dplane_xvb) / vb;
             if (scales) {
-                glm::vec3 eigenvector_min = R[min_id];
+                glm::vec3 eigenvector_min = {R[0][min_id], R[1][min_id], R[2][min_id]};
                 dL_dr                     = (dL_dVrk_inv + glm::transpose(dL_dVrk_inv)) * eigenvector_min;
             } else {
                 glm::vec3 eigenvector_min = Vrk_eigen_vector[min_id];
