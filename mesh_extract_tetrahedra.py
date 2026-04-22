@@ -88,7 +88,7 @@ def marching_tetrahedra_with_binary_search(model_path, views, gaussians: Gaussia
     mesh.update_vertices(vertice_mask)
     mesh.update_faces(face_mask)
 
-    mesh.export(os.path.join(model_path, "recon.ply"))
+    mesh.export(os.path.join(model_path, "recon_tetra.ply"))
 
 
 def extract_mesh(dataset: ModelParams, iteration: int, pipeline: PipelineParams, move_cpu:bool):

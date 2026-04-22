@@ -21,3 +21,5 @@ train_test_depth.py
 *.ncu-rep
 .clangd
 debug_depth*.py
+
+results/
