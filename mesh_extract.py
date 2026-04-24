@@ -60,7 +60,8 @@ def extract_mesh(dataset, pipe, iteration, num_cluster=1):
         depth_list.append(depth[0].cpu().numpy())
 
     torch.cuda.empty_cache()
-    voxel_size = 0.002
+    # voxel_size = 0.002
+    voxel_size = 0.01
     o3d_device = o3d.core.Device("CPU:0")
     vbg = o3d.t.geometry.VoxelBlockGrid(
         attr_names=("tsdf", "weight", "color"),
