@@ -37,7 +37,7 @@ def post_process_mesh(mesh, cluster_to_keep=1):
     return mesh_0
 
 
-def extract_mesh(dataset, pipe, iteration, num_cluster=1):
+def extract_mesh(dataset, pipe, iteration, num_cluster=1, resolution=1024):
     gaussians = GaussianModel(dataset.sh_degree)
     scene = Scene(dataset, gaussians, load_iteration=iteration, shuffle=False)
     kernel_size = dataset.kernel_size
@@ -60,15 +60,14 @@ def extract_mesh(dataset, pipe, iteration, num_cluster=1):
         depth_list.append(depth[0].cpu().numpy())
 
     torch.cuda.empty_cache()
-    # voxel_size = 0.002
-    voxel_size = 0.01
+    voxel_size = 0.002 # 0.002
     o3d_device = o3d.core.Device("CPU:0")
     vbg = o3d.t.geometry.VoxelBlockGrid(
         attr_names=("tsdf", "weight", "color"),
         attr_dtypes=(o3c.float32, o3c.float32, o3c.float32),
         attr_channels=((1), (1), (3)),
         voxel_size=voxel_size,
-        block_resolution=16,
+        block_resolution=resolution,
         block_count=50000,
         device=o3d_device,
     )
@@ -85,9 +84,9 @@ def extract_mesh(dataset, pipe, iteration, num_cluster=1):
 
     mesh = vbg.extract_triangle_mesh()
     mesh.compute_vertex_normals()
-    o3d.io.write_triangle_mesh(os.path.join(dataset.model_path, "recon.ply"), mesh.to_legacy())
+    o3d.io.write_triangle_mesh(os.path.join(dataset.model_path, f"recon_{resolution}.ply"), mesh.to_legacy())
     mesh = post_process_mesh(mesh.to_legacy(), num_cluster)
-    o3d.io.write_triangle_mesh(os.path.join(dataset.model_path, "recon_post.ply"), mesh)
+    o3d.io.write_triangle_mesh(os.path.join(dataset.model_path, f"recon_post_{resolution}.ply"), mesh)
     print("done!")
 
 
@@ -98,9 +97,10 @@ if __name__ == "__main__":
     parser.add_argument("--iteration", default=-1, type=int)
     parser.add_argument("--num_cluster", default=1, type=int)
     parser.add_argument("--quiet", action="store_true")
+    parser.add_argument("--mesh_res", default=16, type=int)
     args = get_combined_args(parser)
     
     # Initialize system state (RNG)
     safe_state(args.quiet)
     with torch.no_grad():
-        extract_mesh(model.extract(args), pipeline.extract(args), args.iteration, args.num_cluster)
+        extract_mesh(model.extract(args), pipeline.extract(args), args.iteration, args.num_cluster, args.mesh_res)

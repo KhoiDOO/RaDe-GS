@@ -28,7 +28,7 @@
 
 # python train.py -s ~/data/mipnerf360/stump/ -m ./results/mipnerf360/stump/ -r 4 --use_decoupled_appearance 3
 # python mesh_extract.py -m ./results/mipnerf360/stump/
-python mesh_extract_tetrahedra.py -m results/mipnerf360/stump/
+# python mesh_extract_tetrahedra.py -m results/mipnerf360/stump/
 
 # python train.py -s ~/data/mipnerf360_extra/flowers/ -m ./results/mipnerf360/flowers/ -r 4 --use_decoupled_appearance 3
 # python mesh_extract.py -m ./results/mipnerf360/flowers/
